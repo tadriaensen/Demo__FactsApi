@@ -1,0 +1,10 @@
+{
+    "api_service": {
+        "debug": true,
+        "port": 8080
+    },
+    "api_authentication": {
+        "enabled": true,
+        "api_key": "636fe81a-d0e7-4738-beab-7902b4c4b101"
+    }
+}

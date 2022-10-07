@@ -1,0 +1,18 @@
+{
+	"application_details": {
+		"name": "AZL Continuous API Monitoring",
+		"version": "0.1"
+	},
+	"logging": {
+		"log_level": "ALL",
+		"console": {
+			"enabled": true
+		},
+		"file": {
+			"enabled": true,
+			"path": "C:\\Development\\AZL\\AZL_ContinuousApiMonitoring\\src\\logging",
+			"file_name": "logging.log",
+			"max_file_size_kilobyte": 10240
+		}
+	}
+}

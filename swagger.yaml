@@ -1,0 +1,363 @@
+swagger: '2.0'
+info:
+  title: Demo API -- Facts
+  version: 1.0.0
+  description: |-
+    This API is a demo solution.
+    The API simulates a fact repository.
+  contact:
+    email: tom@adriaensen.eu
+securityDefinitions:
+  ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+consumes:
+  - application/json
+produces:
+  - application/json
+  - application/xml
+schemes:
+  - http
+  - https
+tags:
+  - name: manage
+    description: all management actions for the api
+  - name: subjects
+    description: operations about fact subjects
+  - name: facts
+    description: operations about facts
+paths:
+  /health:
+    get:
+      tags:
+        - manage
+      summary: check if the server is up and running
+      security: []
+      responses:
+        '200':
+          description: Server is up and running
+  /manage/reset:
+    post:
+      tags:
+        - manage
+      summary: reset all api data
+      description: Performing this request will reset all data to the intial defaults
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+  /subjects:
+    get:
+      tags:
+        - subjects
+      summary: Retrieve all subjects
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/subject_list'
+        '401':
+          description: Unauthorized
+    post:
+      tags:
+        - subjects
+      summary: Create subject
+      security: 
+        - ApiKeyAuth: []
+      parameters:
+        - in: body
+          name: user
+          description: subject details
+          schema:
+            $ref: '#/definitions/subject_creation'
+      responses:
+        '201':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/subject_creation_response'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Subject already exists
+  /subjects/{subject_id}:
+    get:
+      tags:
+        - subjects
+      summary: Retrieve subject details
+      parameters:
+        - in: path
+          name: subject_id
+          type: string
+          required: true
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/subject_details'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Subject does not exist
+    put:
+      tags:
+        - subjects
+      summary: Update subject details
+      parameters:
+        - in: path
+          name: subject_id
+          type: string
+          required: true
+        - in: body
+          name: subject details
+          description: The subject to update.
+          schema:
+            $ref: '#/definitions/subject_update'
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '404':
+          description: Subject does not exist
+    delete:
+      tags:
+        - subjects
+      summary: Delete subject
+      parameters:
+        - in: path
+          name: subject_id
+          type: string
+          required: true
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '404':
+          description: Subject does not exist
+  /facts:
+    get:
+      tags:
+        - facts
+      summary: Retrieve all facts
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/fact_list'
+    post:
+      tags:
+        - facts
+      summary: Create fact
+      security: 
+        - ApiKeyAuth: []
+      parameters:
+        - in: body
+          name: user
+          description: fact details
+          schema:
+            $ref: '#/definitions/fact_creation'
+      responses:
+        '201':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/fact_creation_response'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Fact already exists
+  /facts/{fact_id}:
+    get:
+      tags:
+        - facts
+      summary: Retrieve fact details
+      parameters:
+        - in: path
+          name: fact_id
+          type: string
+          required: true
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/fact_details'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Fact does not exist
+    patch:
+      tags:
+        - facts
+      summary: Change linked subject
+      parameters:
+        - in: path
+          name: fact_id
+          type: string
+          required: true
+        - in: body
+          name: fact details
+          description: The fact to update
+          schema:
+            $ref: '#/definitions/fact_update_linked_subject'
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '400':
+          description: Subject does not exist
+        '401':
+          description: Unauthorized
+        '404':
+          description: Fact does not exist
+    delete:
+      tags:
+        - facts
+      summary: Delete fact
+      parameters:
+        - in: path
+          name: fact_id
+          type: string
+          required: true
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          description: Unauthorized
+        '404':
+          description: Fact does not exist
+  /facts/random:
+    get:
+      tags:
+        - facts
+      summary: Retrieve random fact
+      security: 
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/fact_details'
+        '401':
+          description: Unauthorized
+definitions:
+  subject_creation:
+    type: object
+    properties:
+      subject_description:
+        type: string
+        example: Animal Kingdom
+    required:
+      - subject_description
+  subject_creation_response:
+    type: object
+    properties:
+      subject_id:
+        type: string
+        example: 77a2c3c4-00f6-4c17-aee8-23ea5a62b814
+    required:
+      - subject_description
+  subject_update:
+    type: object
+    properties:
+      subject_description:
+        type: string
+        example: Animal Kingdom
+    required:
+      - subject_description
+  subject_list:
+    type: array
+    items:
+      type: object
+      properties:
+        subject_id:
+          type: string
+          example: 77a2c3c4-00f6-4c17-aee8-23ea5a62b814
+        subject_description:
+          type: string
+          example: Animal Kingdom
+  subject_details:
+     properties:
+      subject_id:
+        type: string
+        example: 7af59fc6-da5c-4fea-b121-2854a7591a75
+      subject_name:
+        type: string
+        example: Animal Kingdom
+     required:
+      - subject_id
+      - subject_name
+  fact_creation:
+     properties:
+      fact_description:
+        type: string
+        example: An elephant can die from heartbreak
+      fact_subject_id:
+        type: string
+        example: 77a2c3c4-00f6-4c17-aee8-23ea5a62b814
+     required:
+      - fact_id
+      - fact_description
+      - fact_subject_name
+  fact_creation_response:
+    type: object
+    properties:
+      fact_id:
+        type: string
+        example: ddb2b91e-00fa-41eb-8d0e-9e007608de45
+    required:
+      - fact_id
+  fact_update_linked_subject:
+     properties:
+      subject_id:
+        type: string
+        example: 77a2c3c4-00f6-4c17-aee8-23ea5a62b814
+     required:
+      - fact_subject_id
+  fact_list:
+    type: object
+    properties:
+       subject_description:
+        type: array
+        items:
+          type: object
+          properties:
+            fact_id:
+              type: string
+              example: ddb2b91e-00fa-41eb-8d0e-9e007608de45
+            fact_description:
+              type: string
+              example: An elephant can die from heartbreak
+  fact_details:
+     properties:
+      fact_id:
+        type: string
+        example: ddb2b91e-00fa-41eb-8d0e-9e007608de45
+      fact_description:
+        type: string
+        example: An elephant can die from heartbreak
+      fact_subject_name:
+        type: string
+        example: Animal Kingdom
+     required:
+      - fact_id
+      - fact_description
+      - fact_subject_name
