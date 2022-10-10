@@ -285,7 +285,7 @@ class RestResponse:
             else:
                 return_value = make_response(response_json, response_code)
         else:
-            return_value = create_error_response(response_code=500, output='JSON')
+            return_value = self.create_error_response(response_code=500, output='JSON')
 
         return return_value
 
