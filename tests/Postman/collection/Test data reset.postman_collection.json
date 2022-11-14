@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "5c06030e-e597-47fd-842e-5b76ecca1809",
+		"name": "Test data reset",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "4257612"
+	},
+	"item": [
+		{
+			"name": "reset all api data (Not authorized)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 401\", function () {\r",
+							"    pm.response.to.have.status(401);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/manage/reset",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"manage",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reset all api data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-Key",
+						"value": "{{X-API-Key}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{baseUrl}}/manage/reset",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"manage",
+						"reset"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
